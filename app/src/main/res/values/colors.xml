@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="primary_brand">#1A237E</color> <color name="primary_light">#534BAE</color>
+    <color name="accent_gold">#FFD700</color>   <color name="error_red">#B00020</color>
+    <color name="background_gray">#F5F5F5</color>
+</resources>

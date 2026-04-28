@@ -32,5 +32,9 @@ class Repository(
 
     // --- GOAL LOGIC ---
     suspend fun updateGoal(goal: Goal) = goalDao.setGoal(goal)
-    suspend fun getGoal(month: String) = goalDao.getGoalForMonth(month)
+
+    // Fix: Change this to return the Flow from the GoalDao
+    fun getGoalByMonth(month: String): kotlinx.coroutines.flow.Flow<Goal?> {
+        return goalDao.getGoalForMonth(month)
+    }
 }

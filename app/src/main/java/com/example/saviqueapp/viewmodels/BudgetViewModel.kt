@@ -43,10 +43,22 @@ class BudgetViewModel(private val repository: Repository) : ViewModel() {
     }
 
     // --- GOALS ---
+
+    // NEW: Added to allow MainActivity to read the goal from RoomDB
+    // This solves the issue of the progress bar not reflecting the actual goal.
+    fun getGoalForMonth(monthYear: String): LiveData<Goal?> {
+        return repository.getGoalByMonth(monthYear).asLiveData()
+    }
+
     fun updateGoal(monthYear: String, min: Double, max: Double) {
         viewModelScope.launch {
-            val goal = Goal(monthYear = monthYear, minGoal = min, maxGoal = max)
-            repository.updateGoal(goal)
+            try {
+                val goal = Goal(monthYear = monthYear, minGoal = min, maxGoal = max)
+                repository.updateGoal(goal)
+                Log.d(TAG, "Goal updated for $monthYear: Max R$max")
+            } catch (e: Exception) {
+                Log.e(TAG, "Error updating goal: ${e.message}")
+            }
         }
     }
 }

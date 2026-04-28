@@ -12,6 +12,7 @@ interface GoalDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun setGoal(goal: Goal)
 
-    @Query("SELECT * FROM goal_table WHERE monthYear = :month LIMIT 1")
-    suspend fun getGoalForMonth(month: String): Goal?
+    // Changed: Removed 'suspend' and added 'Flow' so the Dashboard updates automatically
+    @Query("SELECT * FROM goal_table WHERE monthYear = :month ORDER BY id DESC LIMIT 1")
+    fun getGoalForMonth(month: String): kotlinx.coroutines.flow.Flow<Goal?>
 }

@@ -7,7 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.saviqueapp.databinding.ActivityMainBinding
 import com.example.saviqueapp.viewmodels.BudgetViewModel
 import com.example.saviqueapp.viewmodels.ViewModelFactory
-import com.example.saviqueapp.views.* // Imports all views including ExpenseList and Goals
+import com.example.saviqueapp.views.* import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * MAIN DASHBOARD: Central hub for Savique.
@@ -35,25 +36,39 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Updates the UI in real-time when expenses are added.
-     * This ensures the "Total Spent" card isn't just static text.
+     * Updates the UI in real-time.
+     * Fixed logic: Now observes the ACTUAL user goal instead of a hardcoded 5000.
      */
     private fun observeData() {
-        // Calculate the range for the current month to show on dashboard
-        val end = System.currentTimeMillis()
-        val start = end - (30L * 24 * 60 * 60 * 1000) // Last 30 days
+        val calendar = Calendar.getInstance()
+        val monthYear = SimpleDateFormat("MMMM yyyy", Locale.getDefault()).format(calendar.time)
 
-        budgetViewModel.getExpensesForPeriod(start, end).observe(this) { expenses ->
-            // RUBRIC: Handle invalid inputs (null safety with sumOf)
-            val total = expenses?.sumOf { it.amount } ?: 0.0
+        // Start of the month at 00:00:00
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startOfMonth = calendar.timeInMillis
 
-            // Format to 2 decimal places for a professional UI
-            binding.tvTotalSpent.text = "R ${String.format("%.2f", total)}"
+        // FIX: Set end range to the end of the day or month so "now" is always included
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
+        calendar.set(Calendar.HOUR_OF_DAY, 23)
+        calendar.set(Calendar.MINUTE, 59)
+        val endOfMonth = calendar.timeInMillis
 
-            // RUBRIC: Set min/max goal visual feedback
-            // Assuming a default max goal of R5000 for the progress bar logic
-            val progress = if (total > 0) ((total / 5000) * 100).toInt() else 0
-            binding.pbGoalProgress.progress = progress
+        budgetViewModel.getGoalForMonth(monthYear).observe(this) { goal ->
+            val userMaxGoal = goal?.maxGoal ?: 0.0
+            binding.tvGoalLabel.text = "Goal: R${String.format("%.2f", userMaxGoal)}"
+
+            // Use endOfMonth instead of endOfPeriod
+            budgetViewModel.getExpensesForPeriod(startOfMonth, endOfMonth).observe(this) { expenses ->
+                val total = expenses?.sumOf { it.amount } ?: 0.0
+                binding.tvTotalSpent.text = "R ${String.format("%.2f", total)}"
+
+                val progress = if (userMaxGoal > 0.0) ((total / userMaxGoal) * 100).toInt() else 0
+                binding.pbGoalProgress.progress = progress
+            }
         }
     }
 

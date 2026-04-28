@@ -40,7 +40,7 @@ class UserViewModel(private val repository: Repository) : ViewModel() {
     }
 
     /**
-     * NEW FUNCTION: This fixes the red error in RegisterActivity.
+     *
      * It allows any User object to be saved directly to the RoomDB.
      */
     fun register(user: User) {

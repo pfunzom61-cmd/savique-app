@@ -1,4 +1,5 @@
 name: Android Build
+<<<<<<< HEAD
 on: [push, pull_request]
 jobs:
   build:
@@ -6,10 +7,38 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: set up JDK 17
+=======
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+>>>>>>> 9f669edae79502651d5b6b46047fb34e2d1ed57b
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
+<<<<<<< HEAD
       - name: Build with Gradle
         run: ./gradlew assembleDebug
+=======
+
+      - name: Create google-services.json from secret
+        run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > app/google-services.json
+
+      - name: Make Gradle executable
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew assembleDebug
+
+      - name: Run Unit Tests
+        run: ./gradlew test
+>>>>>>> 9f669edae79502651d5b6b46047fb34e2d1ed57b

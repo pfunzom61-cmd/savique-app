@@ -1,3 +1,4 @@
+cat > .github/workflows/build.yml << 'EOF'
 name: Android Build
 <<<<<<< HEAD
 on: [push, pull_request]
@@ -41,4 +42,8 @@ jobs:
 
       - name: Run Unit Tests
         run: ./gradlew test
+<<<<<<< HEAD
 >>>>>>> 9f669edae79502651d5b6b46047fb34e2d1ed57b
+=======
+EOF
+>>>>>>> db1b7ad12d1bdeff9be2d387cf80c72c1a76ab5d

@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
     <application
         android:name=".SaviqueApplication"
         android:allowBackup="true"
@@ -44,6 +47,10 @@
 
         <activity
             android:name=".views.GoalsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".views.GraphActivity"
             android:exported="false" />
 
         <provider

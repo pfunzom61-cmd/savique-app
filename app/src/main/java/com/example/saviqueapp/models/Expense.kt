@@ -7,18 +7,12 @@ import androidx.room.PrimaryKey
 data class Expense(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-
     val description: String = "",
-
     val amount: Double = 0.0,
-
-    val date: Long = 0L, // Stored as a timestamp for easy sorting/filtering
-
+    val date: Long = 0L,
     val startTime: String = "",
-
     val endTime: String = "",
-
-    val categoryId: Int = 0,    // This links the expense to a Category ID
-
-    val photoUri: String? = null // Optional: Stores the path to the photo
+    val categoryId: Int = 0,
+    val photoUri: String? = null,
+    val userId: String = "" // Isolates data per Firebase user
 )

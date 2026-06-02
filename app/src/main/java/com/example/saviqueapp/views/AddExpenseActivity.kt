@@ -15,6 +15,8 @@ import com.example.saviqueapp.SaviqueApplication
 import com.example.saviqueapp.databinding.ActivityAddExpenseBinding
 import com.example.saviqueapp.models.Category
 import com.example.saviqueapp.models.Expense
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.example.saviqueapp.viewmodels.BudgetViewModel
 import com.example.saviqueapp.viewmodels.ViewModelFactory
 import java.io.File
@@ -114,10 +116,77 @@ class AddExpenseActivity : AppCompatActivity() {
                 photoUri = photoUri?.toString()
             )
             budgetViewModel.addExpense(expense)
+
+            // CUSTOM FEATURE 1: Update spending streak in Firestore
+            updateStreak()
+
             Toast.makeText(this, "Expense Saved!", Toast.LENGTH_SHORT).show()
             finish()
         } else {
             Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    /**
+     * CUSTOM FEATURE 1: Spending Streak
+     * Checks if the user logged an expense yesterday to continue the streak,
+     * or resets to 1 if they missed a day.
+     * Data stored in Firestore under /users/{uid}/streak and lastLogDate.
+     */
+    private fun updateStreak() {
+        val TAG = "SAVIQUE_STREAK"
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val db = FirebaseFirestore.getInstance()
+        val userDoc = db.collection("users").document(uid)
+
+        val todayStr = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            .format(java.util.Date())
+
+        userDoc.get()
+            .addOnSuccessListener { doc ->
+                val lastLogDate = doc.getString("lastLogDate") ?: ""
+                val currentStreak = doc.getLong("streak")?.toInt() ?: 0
+
+                // Calculate yesterday's date string for comparison
+                val cal = Calendar.getInstance()
+                cal.add(Calendar.DAY_OF_YEAR, -1)
+                val yesterdayStr = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    .format(cal.time)
+
+                val newStreak = when {
+                    lastLogDate == todayStr -> {
+                        // Already logged today — don't increment
+                        android.util.Log.d(TAG, "Already logged today, streak stays at $currentStreak")
+                        currentStreak
+                    }
+                    lastLogDate == yesterdayStr -> {
+                        // Logged yesterday — increment streak
+                        android.util.Log.d(TAG, "Consecutive day! Streak: ${currentStreak + 1}")
+                        currentStreak + 1
+                    }
+                    else -> {
+                        // Missed a day — reset streak to 1
+                        android.util.Log.d(TAG, "Streak broken. Resetting to 1")
+                        1
+                    }
+                }
+
+                // Save updated streak back to Firestore
+                userDoc.update(
+                    mapOf(
+                        "streak" to newStreak,
+                        "lastLogDate" to todayStr
+                    )
+                )
+                    .addOnSuccessListener {
+                        android.util.Log.d(TAG, "Streak updated to $newStreak on $todayStr")
+                    }
+                    .addOnFailureListener { e ->
+                        android.util.Log.e(TAG, "Failed to update streak: ${e.message}")
+                    }
+            }
+            .addOnFailureListener { e ->
+                android.util.Log.e(TAG, "Failed to read user doc for streak: ${e.message}")
+            }
     }
 }

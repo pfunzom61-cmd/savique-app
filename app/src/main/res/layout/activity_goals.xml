@@ -17,7 +17,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set your spending limit to track progress."
+        android:text="Set your minimum and maximum spending limits."
         android:layout_marginTop="8dp"
         android:textColor="#666666" />
 
@@ -26,6 +26,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:hint="Minimum Budget (R)">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etMinGoal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:hint="Maximum Budget (R)">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etMaxGoal"

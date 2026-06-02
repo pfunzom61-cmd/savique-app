@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "390736781073",
+    "project_id": "saviqueapp",
+    "storage_bucket": "saviqueapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:390736781073:android:981979224015b36324b6b0",
+        "android_client_info": {
+          "package_name": "com.example.saviqueapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUcsS_1OGDKuCHbT6QIFY2B5Mn5YV8EFg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

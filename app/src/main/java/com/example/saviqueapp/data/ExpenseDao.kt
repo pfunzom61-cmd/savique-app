@@ -11,13 +11,11 @@ interface ExpenseDao {
     @Insert
     suspend fun insertExpense(expense: Expense)
 
-    // RUBRIC: View list of entries during a user-selectable period
-    // We use Long (timestamps) to make date comparison fast and crash-proof
-    @Query("SELECT * FROM expense_table WHERE date BETWEEN :startDate AND :endDate ORDER BY date DESC")
-    fun getExpensesByDate(startDate: Long, endDate: Long): Flow<List<Expense>>
+    // DEFENSIVE: Filter by both date range AND userId
+    @Query("SELECT * FROM expense_table WHERE userId = :userId AND date BETWEEN :startDate AND :endDate ORDER BY date DESC")
+    fun getExpensesByDate(userId: String, startDate: Long, endDate: Long): Flow<List<Expense>>
 
-    // RUBRIC: View total amount spent on each category during a period
-
-    @Query("SELECT SUM(amount) FROM expense_table WHERE categoryId = :catId AND date BETWEEN :start AND :end")
-    suspend fun getTotalForCategory(catId: Int, start: Long, end: Long): Double?
+    // DEFENSIVE: Filter category totals by userId too
+    @Query("SELECT SUM(amount) FROM expense_table WHERE userId = :userId AND categoryId = :catId AND date BETWEEN :start AND :end")
+    suspend fun getTotalForCategory(userId: String, catId: Int, start: Long, end: Long): Double?
 }

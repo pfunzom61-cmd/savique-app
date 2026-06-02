@@ -8,7 +8,7 @@ import com.example.saviqueapp.models.*
 
 
 // We list all our entities here so Room knows which tables to create
-@Database(entities = [User::class, Category::class, Expense::class, Goal::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, Category::class, Expense::class, Goal::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     // These link our DAOs to the database

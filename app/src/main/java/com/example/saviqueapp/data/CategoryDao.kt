@@ -11,6 +11,7 @@ interface CategoryDao {
     @Insert
     suspend fun insertCategory(category: Category)
 
-    @Query("SELECT * FROM category_table ORDER BY name ASC")
-    fun getAllCategories(): Flow<List<Category>>
+    // DEFENSIVE: Only return categories belonging to the logged-in user
+    @Query("SELECT * FROM category_table WHERE userId = :userId ORDER BY name ASC")
+    fun getAllCategories(userId: String): Flow<List<Category>>
 }

@@ -54,8 +54,4 @@ The project includes localized automated unit tests ensuring underlying financia
 
 ---
 
-##  Installation & Local Setup
 
-1. Clone this repository onto your machine:
-   ```bash
-   git clone [https://github.com/YOUR_USERNAME/Savique-Budget-Tracker.git](https://github.com/YOUR_USERNAME/Savique-Budget-Tracker.git)

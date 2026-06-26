@@ -4,13 +4,13 @@ Savique is a native Android budgeting application built to help users take contr
 
 ---
 
-## 📱 Video Demonstration & Screenshots
+##  Video Demonstration & Screenshots
 
 ### [Watch the Full Walkthrough on YouTube](https://www.youtube.com/watch?v=a7sU380J10A)
 *A comprehensive demonstration running on a physical Android device showcasing Firebase data synchronization, spending graphs, the progress dashboard, spending streaks, and CSV exporting.*
 
 
-## 🛠️ Tech Stack & Architecture
+##  Tech Stack & Architecture
 
 ### Architectural Pattern: MVVM (Model-View-ViewModel)
 The application strictly adheres to the **MVVM** pattern to decouple the presentation layer from business logic and data persistence, ensuring an extensible and testable codebase:
